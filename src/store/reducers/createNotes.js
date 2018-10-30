@@ -1,4 +1,5 @@
 import * as actionType from '../actions/actionTypes';
+import { stat } from 'fs';
 
 const initialState={
   saveDataError:null,
@@ -11,7 +12,14 @@ const initialState={
   formType:null,
   SaveData:null,//when data succss then assign success message else null
   documentCount:null,
-  findData:[]
+  findData:[],
+  spinner:true,
+  error:'',
+  registerSuccess:'',
+  token:'',
+  userId:'',
+  allDocuments:[],
+  
 }
 const reducer=(state=initialState,action)=>{
 switch(action.type){
@@ -48,7 +56,8 @@ switch(action.type){
   return{
     ...state,
     allNotes:action.data,
-    concatNotes: state.concatNotes.concat(action.data)
+    concatNotes: state.concatNotes.concat(action.data),
+    spinner:false
   }
   //update old state
   case actionType.UPDATE_DATA_STATE:
@@ -91,6 +100,63 @@ return{
     ...state,
     findData:action.data
   }
+  //registration case
+
+  case actionType.REGISTRATION_SUCCESS:
+  return{
+    ...state,
+    registerSuccess:action.regSuccess,
+    error:'',
+  }
+
+  case actionType.REGISTRATION_FAILD:
+  return{
+    ...state,
+    error:action.err,
+    registerSuccess:''
+  }
+
+  case actionType.MSG_DIALOG_TIMEOUT:
+  return{
+    ...state,
+    error:'',
+    registerSuccess:''
+  }
+
+  //login case
+   case actionType.LOGIN_SUCCESS:
+   return{
+     ...state,
+     token:action.token,
+     registerSuccess:action.msg,
+     userId:localStorage.getItem('userId')
+   }
+   case actionType.LOG_OUT:
+   return{
+     ...state,
+     token:''
+   }
+
+   case actionType.CHECK_LOGIN:
+   return{
+     ...state,
+     token:action.token,
+     userId:localStorage.getItem('userId')
+   }
+
+   case actionType.GET_DOCUMENTS_SUCCESS:
+   return{
+     ...state,
+     allDocuments:action.data,
+     spinner:false
+   }
+
+   case actionType.UPDATED_LIKES_SUCCESS:
+   console.log(action.data)
+   return{
+    ...state,
+     allDocuments:action.data,
+   }
     default:
     return state;
 }

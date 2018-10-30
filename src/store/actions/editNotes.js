@@ -48,3 +48,25 @@ export const onSaveSuccess=(message)=>{
  message:message
 }
 }
+
+export const updateLikes=(data,dataArray)=>{
+    return dispatch=>{
+        axios.put(`${Server.server}/notes/likesUpdate/3`,data).then(res=>{
+        // dispatch(updateLikesSuccess(res.data,data,dataArray))
+        }).catch(err=>{
+            console.log(err.message)
+        })
+    }
+}
+
+// export const updateLikesSuccess=(updated,userSelectData,allData)=>{
+// for(var i=0;i<=allData.length-1;i++){
+//     if(allData[i]._id===userSelectData.id){
+//         allData[i].likes=updated;
+//     }
+// }
+// return{
+// type:actionType.UPDATED_LIKES_SUCCESS,
+// data:allData
+// }
+// }

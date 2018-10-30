@@ -19,7 +19,9 @@ export const onaccessDocCount=(docCount)=>{
 }
 //access number of documents
 export const accessDocCount=()=>{
+    
     return dispatch=>{
+        axios.defaults.headers.common['Authorization'] =`Bearer ${localStorage.getItem('token')}`;
         axios.get(`${Server.server}/notes/count`).then(res=>{
         console.log(res.status)
          var myDomument=+res.data;
@@ -38,16 +40,16 @@ export const accessDocCount=()=>{
 }
 //get requist to access data to server
 export const accessNotes=(indexNum,skip,visited,visitArray,data)=>{
-
+     
     return dispatch=>{
     if(!visited){
     axios.get(`${Server.server}/notes/${skip}`)
     .then(res=>{
-    console.log(res.status)
+   
     if(res.status===404){
     dispatch(createNotes.onSaveSuccess("Not Found!!"))
     }
-  
+   console.log(res.data)
      dispatch(accessDataSuccess(res.data))
 
     })
@@ -85,4 +87,26 @@ return{
     data:newData,
     allData:data
    }
+}
+
+
+
+
+export const getDocumnets=()=>{
+
+return dispatch=>{
+    axios.get(`${Server.server}/notes/documents`).then(res=>{
+        dispatch(getDocSuccess(res.data))
+        })
+        .catch(err=>{
+            console.log(err)
+        })
+}
+}
+
+export const getDocSuccess=(doc)=>{
+    return{
+type:actionTypes.GET_DOCUMENTS_SUCCESS,
+data:doc
+    }
 }

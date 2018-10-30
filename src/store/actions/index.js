@@ -1,9 +1,9 @@
 export {
-       accessNotes,accessDocCount
+       accessNotes,accessDocCount,getDocumnets
 } from './accessNotes';
       
 export {
-      editInputsField,updateNotes
+      editInputsField,updateNotes,updateLikes
 } from './editNotes';
 
 export {
@@ -17,3 +17,11 @@ export {
 export {
      findData
 } from './findNotes';
+
+export {
+       Registration,msgDialogHide,registerFaild
+} from './registration';
+
+export {
+       Login,logOut,checkLogin
+} from './login';

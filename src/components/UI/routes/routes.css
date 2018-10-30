@@ -1,0 +1,29 @@
+.NavigationItem {
+    margin-left: 10px;
+    box-sizing: border-box;
+    display: block;
+    width: 100%;
+    flex-flow: row;
+}
+
+.NavigationItem a {
+    background-color: rgb(82, 162, 231);
+   color:white;
+    text-decoration: none;
+    width: 100%;
+    box-sizing: border-box;
+    display: block;
+    color: white;
+    border-radius: 10px;
+    text-align: center;
+    flex-flow: row;
+    padding: 6px;
+    border-left: 5px outset rgb(185, 106, 15);
+    border-bottom: 1px inset rgb(187, 163, 135);
+    font-size: 15px;
+}
+
+.NavigationItem :hover{
+    border-left: 0px outset rgb(185, 106, 15);
+    border-right: 5px inset rgb(185, 106, 15);
+}

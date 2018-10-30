@@ -2,7 +2,6 @@ import React,{Component} from 'react';
 import { Redirect } from 'react-router-dom';
 import { connect } from 'react-redux';
 import Form from '../../UI/form/from';
-import Navbar from '../../UI/navBar/navBar';
 import './NotesList.css';
 import SearchInput from '../../UI/SearchInputField/SearchInputField';
 import { error } from '../../Validation/inputValidation';
@@ -10,9 +9,11 @@ import Modal from '../../UI/modal/modal';
 import * as Icons from 'react-icons/lib/io';
 import PaginationBar from '../../UI/pagination/pagination';
 import * as actionsIndex from '../../../store/actions/index';
+import Spinner from '../../UI/Spiner/Spiner';
 class NotesList extends Component{
 
 componentWillMount(){
+
   this.props.onAccessCountDocument();
   this.props.onAccessNotes(0);//access data from db with 0 number of data skip
   this.props.onFindData([])//clear finding data array
@@ -99,7 +100,10 @@ onSearchButtonClick=()=>{
     render(){
     return(
     <div>
- <Navbar/>
+
+      {
+     this.props.token?null:<Redirect to='/'/>
+ }
  <div className="container">
  <SearchInput 
                SwithToCreateNotes={this.SwithToNewCreateNotes}
@@ -108,12 +112,13 @@ onSearchButtonClick=()=>{
                searchButtonClick={this.onSearchButtonClick} 
                 />
  
+
  <table  className="table table-striped table-bordered">
         <thead>
-          <tr>
+          <tr >
           <th></th>
             <th>Title</th>
-            <th>Content</th>
+            <th> Content</th>
             <th>Updated Date</th>
           </tr>
         </thead>
@@ -128,10 +133,14 @@ onSearchButtonClick=()=>{
                  date={data.createDate}
                  tags={data.tags}
                  onEditClick={this.SwithToEditCreateNotes}
-                 onDeleteClick={this.onDeleteNotes} />
+                 onDeleteClick={this.onDeleteNotes}
+                 />
 
                 )):
+                
                 this.props.NotesData.map(data=>(
+                 
+                  
                   <Form  key={data._id}
                         id={data._id}
                          title={data.title}
@@ -139,13 +148,22 @@ onSearchButtonClick=()=>{
                          date={data.createDate}
                          tags={data.tags}
                          onEditClick={this.SwithToEditCreateNotes}
-                         onDeleteClick={this.onDeleteNotes} />
-        
-                        ))
+                         onDeleteClick={this.onDeleteNotes}
+                         user={data.userId===localStorage.getItem('userId')}
+                         />
+                        
+                        )
+                       
+                        ) 
+                      
          }
          
         </tbody>
       </table>
+
+     { 
+     this.props.spinner?<Spinner/>:null
+    }
   <PaginationBar
         selectPaginationNode={this.state.selectPaginationNode}
         updatePaginationNode={this.onUpdatePaginationNode}
@@ -157,7 +175,6 @@ onSearchButtonClick=()=>{
     <button style={{float:'right'}} onClick={this.onModalContinueButton} className="btn btn-success"><Icons.IoCheckmark/> Continue</button>
     </Modal>  :null
 }
-
 
 {this.state.redirect?<Redirect to="/create-notes"/>:null}
 
@@ -174,7 +191,9 @@ const mapStateToProps=state=>{
   return{
     NotesData:state.allNotes,
     concatNotes:state.concatNotes,
-    findData:state.findData
+    findData:state.findData,
+    spinner:state.spinner,
+    token:state.token!==''
   }
 }
 const mapDispatchToProps=dispatch=>{

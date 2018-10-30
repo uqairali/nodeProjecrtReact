@@ -6,7 +6,6 @@ import { Redirect } from 'react-router-dom';
 import Input from '../../../components/UI/input/input';
 import { updateObject,checkValidity,error } from '../../Validation/inputValidation';
 import Alert from '../../UI/alert/alert';
-import Navbar from '../../UI/navBar/navBar';
 import * as actionsIndex from '../../../store/actions/index';
 class CreateNotes extends Component{
 
@@ -57,7 +56,8 @@ class CreateNotes extends Component{
              },
         },
         onsubmit:false,
-        closeComponent:false
+        closeComponent:false,
+  
     }
 switchToNotesList=()=>{
     this.setState({closeComponent:true})
@@ -85,7 +85,9 @@ this.setState({onsubmit:true})
     title:this.state.formInputs.title.value,
     content:this.state.formInputs.content.value,
     tags:this.state.formInputs.tags.value,
-    createDate:this.dateFormate(new Date)
+    createDate:this.dateFormate(new Date),
+    userId:this.props.userId,
+    likes:0
 
   }
 if(error.Title===null&&error.Content===null){
@@ -146,7 +148,7 @@ let form=(
   
   return(
       <div>
-      <Navbar/>
+     
     <div className="container">
     <div className="card bg-light mb-3" style={{maxWidth:"700px",borderWidth:'1.5px'}}>
     <div style={{backgroundColor:"white"}} className="card-body">
@@ -178,7 +180,7 @@ let form=(
     this.state.closeComponent||
     this.props.formType===null||
      this.props.SaveData!==null?
-    <Redirect to='/'/>
+    <Redirect to='/NotesList'/>
     :null
 }
             </div>
@@ -195,7 +197,8 @@ const mapStateToprops=state=>{
         tags:state.tags,
         id:state.id,
         formType:state.formType,
-        SaveData:state.SaveData
+        SaveData:state.SaveData,
+        userId:state.userId
     }
 }
 
